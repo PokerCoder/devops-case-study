@@ -8,15 +8,40 @@
       debug:
         msg: "Hello World!"
 
-    - name: Install git
+    - name: Install apt packages
       apt:
-        name: git
+        name: "{{ item }}"
         state: present
         update_cache: yes
+      with_items:
+        - git
+        - python3-venv
 
     - name: Clone the repo from Github
       git:
         repo: https://github.com/PokerCoder/devops-case-study.git
-        dest: ~/
+        dest: /home/devops-case-study/
         clone: yes
         update: yes
+
+    - name: Create virtualenv
+      shell: python3 -m venv /home/devops-case-study/venv
+
+    - name: Upgrade pip
+      pip:
+        name: pip
+        virtualenv: /home/devops-case-study/venv
+        state: forcereinstall
+
+    - name: Install specified python requirements
+      ansible.builtin.pip:
+        requirements: /home/devops-case-study/requirements.txt
+        virtualenv: /home/devops-case-study/venv
+
+    - name: Copy service file
+      shell: cp /home/devops-case-study/flask-app.service /etc/systemd/system/flask-app.service
+
+    - name: Start service
+      shell: |
+        systemctl daemon-reload
+        systemctl start flask-app
