@@ -1,0 +1,22 @@
+---
+- name: Setup Flask App
+  gather_facts: true
+  hosts: all
+  become: true
+  tasks:
+    - name: Say hello
+      debug:
+        msg: "Hello World!"
+
+    - name: Install git
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Clone the repo from Github
+      git:
+        repo: https://github.com/PokerCoder/devops-case-study.git
+        dest: ~/
+        clone: yes
+        update: yes
