@@ -7,7 +7,7 @@
   vars:
     wdir: /home/devops-case-study
     venv: /home/venv
-    reload: "{{ wdir }}/reload.sh > /dev/null 2>&1 &"
+    reload: "{{ wdir }}/scripts/reload.sh > /dev/null 2>&1 &"
   tasks:
     - name: Install apt packages
       apt:
@@ -34,10 +34,10 @@
 
     - name: Start gunicorn
       shell: |
-        chmod +x {{ wdir }}/reload.sh 
+        chmod +x {{ wdir }}/scripts/reload.sh 
         {{ reload }}        
     
     - name: Start tracker
       shell: |
-        chmod +x {{ wdir }}/tracker.sh 
-        nohup {{ wdir }}/tracker.sh {{ wdir }} '{{ reload }}' > /dev/null 2>&1 &
+        chmod +x {{ wdir }}/scripts/tracker.sh 
+        nohup {{ wdir }}/scripts/tracker.sh {{ wdir }} '{{ reload }}' > /dev/null 2>&1 &
