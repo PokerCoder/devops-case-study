@@ -1,9 +1,9 @@
 ## A Case Study for the New Grad DevOps Engineer Role
 
-###Save the file, save the time!
+### Save the file, save the time!
 When working with Vagrant, the virtual machine is automatically updates whenever  changes the source code of Flask application.
 
-###Exception: requirements' changes
+### Exception: requirements' changes
 When changed requirements, run the code below and continue where you left off.
 ```bash
 vagrant reload --provision
