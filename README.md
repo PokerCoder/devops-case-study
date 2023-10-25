@@ -22,7 +22,7 @@ I saw it working with Python 3.9.12 on MacOS.
 ```bash
 git clone https://github.com/PokerCoder/devops-case-study.git
 cd devops-case-study
-echo 'export DEPLOY_MODE=LOCAL' >> '~/.zshrc' # ~/.bashrc if you are using bash
+echo 'export DEPLOY_MODE=LOCAL' >> ~/.zshrc # ~/.bashrc if you are using bash
 vagrant up
 ```
 The application will be available at [http://192.168.33.10:5000](http://192.168.33.10:5000). If it doesn't work, you better call Saul.
