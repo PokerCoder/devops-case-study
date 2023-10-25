@@ -1,4 +1,4 @@
-## A Case Study for the DevOps
+## A Case Study for DevOps
 
 ### Save the file, save the time!
 When working with Vagrant, the virtual machine is automatically updates whenever  changes the source code of Flask application.
