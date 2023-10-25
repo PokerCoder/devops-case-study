@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "ansible/playbook.yml"
-    ansible.inventory_path = "ansible/environments/local/inventory"
+    ansible.inventory_path = "ansible/inventory"
     ansible.verbose = "v"
   end
   config.vm.provider "virtualbox" do |vb|

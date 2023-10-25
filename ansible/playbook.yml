@@ -3,15 +3,12 @@
   gather_facts: true
   hosts: all
   become: true
+
   vars:
     wdir: /home/devops-case-study
     venv: /home/venv
-    mode: "{{ lookup('env','DEPLOY_MODE') }}"
+    reload: "{{ wdir }}/reload.sh > /dev/null 2>&1 &"
   tasks:
-    - name: Say hello
-      debug:
-        msg: "Hello World! - from {{ mode }}"
-
     - name: Install apt packages
       apt:
         name: "{{ item }}"
@@ -20,14 +17,6 @@
       with_items:
         - git
         - python3-venv
-
-    - name: Clone the repo from Github
-      git:
-        repo: https://github.com/PokerCoder/devops-case-study.git
-        dest: "{{ wdir }}"
-        clone: yes
-        update: yes
-      when: mode != 'LOCAL'
 
     - name: Create virtualenv
       shell: python3 -m venv "{{ venv }}"
@@ -43,13 +32,12 @@
         requirements: "{{ wdir }}/requirements.txt"
         virtualenv: "{{ venv }}"
 
-    - name: Copy service file
-      shell: cp {{ wdir }}/flask-app.service /etc/systemd/system/flask-app.service
-
-    - name: Stop service to reload
-      shell: systemctl stop flask-app
-
-    - name: Start service
+    - name: Start gunicorn
       shell: |
-        systemctl daemon-reload
-        systemctl start flask-app
+        chmod +x {{ wdir }}/reload.sh 
+        {{ reload }}        
+    
+    - name: Start tracker
+      shell: |
+        chmod +x {{ wdir }}/tracker.sh 
+        nohup {{ wdir }}/tracker.sh {{ wdir }} '{{ reload }}' > /dev/null 2>&1 &

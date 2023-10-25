@@ -5,4 +5,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "<p>Hallllo, Galaxy!</p>"
+    with open('test.txt') as f:
+        content = f.read()
+    return content
