@@ -41,6 +41,9 @@
     - name: Copy service file
       shell: cp /home/devops-case-study/flask-app.service /etc/systemd/system/flask-app.service
 
+    # - name: Stop service to reload
+    #   shell: systemctl stop flask-app
+
     - name: Start service
       shell: |
         systemctl daemon-reload
