@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/home/devops-case-study
-ExecStart=/home/venv/bin/gunicorn -b 0.0.0.0:5000 -w 3 wsgi
+ExecStart=/bin/bash -c 'if [ "$(hostname)" = "vagrant" ]; then /home/venv/bin/gunicorn -b 0.0.0.0:5000 -w 3 --reload wsgi; else /home/venv/bin/gunicorn -b 0.0.0.0:5000 -w 3 wsgi; fi'
 Restart=always
 
 [Install]
