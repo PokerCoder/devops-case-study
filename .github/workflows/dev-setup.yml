@@ -1,9 +1,9 @@
-name: Development Setup
+name: Setup Development Release
 
 on: 
   push:
     branches:
-      - development
+      - main
 
 jobs:
   Deploy:

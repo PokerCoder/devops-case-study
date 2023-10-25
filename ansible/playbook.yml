@@ -3,10 +3,14 @@
   gather_facts: true
   hosts: all
   become: true
+  vars:
+    wdir: /home/devops-case-study
+    venv: /home/venv
+    mode: "{{ lookup('env','DEPLOY_MODE') }}"
   tasks:
     - name: Say hello
       debug:
-        msg: "Hello World!"
+        msg: "Hello World! - from {{ mode }}"
 
     - name: Install apt packages
       apt:
@@ -20,29 +24,30 @@
     - name: Clone the repo from Github
       git:
         repo: https://github.com/PokerCoder/devops-case-study.git
-        dest: /home/devops-case-study/
+        dest: "{{ wdir }}"
         clone: yes
         update: yes
+      when: mode != 'LOCAL'
 
     - name: Create virtualenv
-      shell: python3 -m venv /home/devops-case-study/venv
+      shell: python3 -m venv "{{ venv }}"
 
     - name: Upgrade pip
       pip:
         name: pip
-        virtualenv: /home/devops-case-study/venv
+        virtualenv: "{{ venv }}"
         state: forcereinstall
 
     - name: Install specified python requirements
       ansible.builtin.pip:
-        requirements: /home/devops-case-study/requirements.txt
-        virtualenv: /home/devops-case-study/venv
+        requirements: "{{ wdir }}/requirements.txt"
+        virtualenv: "{{ venv }}"
 
     - name: Copy service file
-      shell: cp /home/devops-case-study/flask-app.service /etc/systemd/system/flask-app.service
+      shell: cp {{ wdir }}/flask-app.service /etc/systemd/system/flask-app.service
 
-    # - name: Stop service to reload
-    #   shell: systemctl stop flask-app
+    - name: Stop service to reload
+      shell: systemctl stop flask-app
 
     - name: Start service
       shell: |
